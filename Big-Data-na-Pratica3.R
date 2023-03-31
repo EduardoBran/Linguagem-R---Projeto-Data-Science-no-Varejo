@@ -44,12 +44,36 @@ dim(dados) # 15002 linhas 20 colunas
 str(dados)
 
 
-# foi detectado diversas linhas com valores em branco
+# foi detectado diversas linhas com valores em branco (devem ser removidas)
+# foi detectado um padrão dessas linhas em branco: 1 linha tem conteúdo, 1 linha está em branco, 1 linha tem conteúdo, 1 linha está em branco
 
 
+# 1ª forma de remover as linhas com valores em branco
+
+# por conta do padrão vamos separar as linhas pares das linhas ímpares
+
+linhas_pares <- seq(2, nrow(dados), 2)      # No caso de linhas_pares, a sequência começa no número 2, que é a segunda linha do data frame, e termina no número de linhas do data frame (nrow(dados)), com incrementos de 2. Isso significa que a variável linhas_pares contém os números das linhas pares do data frame dados.
+linhas_impares <- seq(1, nrow(dados), 2)
+
+View(linhas_pares)
+
+# separamos os dados e então usaremos o dataset df1 com as linhas pares (linhas onde tem dados válidos)
+
+df1 <- dados[linhas_pares, ]
+View(df1)
+df2 <- dados[linhas_impares, ]
+View(df2) 
 
 
+# 2ª forma de remover as linhas com valores em branco
+dados2 <- dados
 
+# converter todas as células para caracteres e remover espaços em branco
+dados2 <- as.data.frame(lapply(dados, as.character), stringsAsFactors = FALSE)
+dados2 <- as.data.frame(lapply(dados2, trimws))
+
+# remover linhas com valores em branco em todas as colunas
+dados2 <- dados2[rowSums(dados2 != "") > 0, ]
 
 
 
