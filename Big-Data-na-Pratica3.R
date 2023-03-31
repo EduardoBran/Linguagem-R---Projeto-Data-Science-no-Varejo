@@ -23,3 +23,33 @@ library(writexl)       # pacote para gerar e gravar os arquivos em Excel
 options(warn=-1)       # filtra tipos de warning (para não poluir o console)
 
 
+
+# Definimos nossa problema de negócio: 
+
+# - vamos mineirar / buscar padrões de compras em transações comerciais
+# - definimos a técnica usada (Market Basket Analysis)
+# - definimos o pacote com algoritmos necessários para aplicar a técnica
+
+
+# Agora vamos aos dados
+
+
+# Carrega e explora o dataset
+
+dados <- read.csv("dataset_bd3.csv")
+
+View(dados)
+
+dim(dados) # 15002 linhas 20 colunas
+str(dados)
+
+
+# foi detectado diversas linhas com valores em branco
+
+
+
+
+
+
+
+
