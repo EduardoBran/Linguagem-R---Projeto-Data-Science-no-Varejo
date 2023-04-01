@@ -120,6 +120,7 @@ grepl("^\\s*$", df1$Item02) # retorna TRUE quando tiver valores ausentes represe
 
 
 # Agora vamos interpretar nosso dataframe para tomarmos uma decisão.
+
 # Observando a linha 6, podemos ver que foi comprado apenas 1 produto e todas as outras colunas desta linha estão vazias
 # Faz sentido manter esta linha 6 sabendo que nosso objetivo é encontrar padrões (cliente que compra produto A também compra produto B) ?
 # Se só temos 1 produto na transação, faria sentido manter esta transação ? Como buscaremos um relacionamento / padrão de compra?
@@ -142,5 +143,49 @@ df1_two <- df1[!grepl("^\\s*$", df1$Item02), ]
 # Verificando novamente número de itens distintos
 
 n_distinct(df1_two)
+
+
+
+# Até aqui mantivemos no nosso dataframe 'df1_tow' transações somente onde houveram a compra de pelo menos 2 produtos
+# Ou seja, somente onde as colunas Item01 e Item02 foram preenchidas. As outras colunas podem ficar em branco pois estamos considerando no mínimo 2 transações.
+
+
+
+# Agora vamos novamente interpretar nosso dataframe para tomarmos outra decisão.
+
+# Faz sentido manter todas as 20 colunas? 
+# Não precisaremos. Um dos motivos é que observando o dataframe, são poucas as colunas totalmente preenchidas.
+# Logo se usarmos as 20 colunas, teremos uma matriz muito esparsa com muitos valores em branco.
+# Neste caso iremos diminuir nossa esparsidade e trabalharemos com apenas 6 colunas (escolha do professor).
+
+
+
+# Preparando o pacote convertendo as variáveis (colunas) para o tipo fator
+
+# - Estamos convertendo as colunas do dataframe para o tipo fator porque isso é necessário para realizar a análise de market basket (análise de cestas de compras).
+# - A análise de market basket envolve a criação de uma matriz de cesta de compras, em que cada linha representa uma transação (ou venda)
+#   e cada coluna representa um item (produto) que pode estar presente ou não na transação. Para criar essa matriz, precisamos que as
+#   colunas sejam do tipo fator, para que o software possa identificar os diferentes níveis (valores) presentes em cada coluna.
+# - Além disso, o tipo fator é mais eficiente do que o tipo caractere (ou string) para armazenar variáveis categóricas com um número
+#   limitado de níveis, pois ocupa menos espaço em memória e permite que operações de comparação e ordenação sejam executadas mais
+#   rapidamente.
+
+pacote <- df1_two
+
+pacote$Item01 <- as.factor(pacote$Item01)
+pacote$Item02 <- as.factor(pacote$Item02)
+pacote$Item03 <- as.factor(pacote$Item03)
+pacote$Item04 <- as.factor(pacote$Item04)
+pacote$Item05 <- as.factor(pacote$Item05)
+pacote$Item06 <- as.factor(pacote$Item06)
+
+View(pacote)
+
+summary(pacote)
+str(pacote)
+
+pacote_split <- split(pacote[,1:6], f = pacote$Item02) # aqui teve que ser feita uma alteração no código. Foi usando o "f = pacote$Item02" para que o Length fique igual ao do professor
+
+View(pacote_split)
 
 
