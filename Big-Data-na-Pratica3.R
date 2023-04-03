@@ -44,7 +44,6 @@ dim(dados) # 15002 linhas 20 colunas
 str(dados)
 
 
-
 # foi detectado diversas linhas com todos os valores de colunas em branco (devem ser removidas)
 # foi detectado um padrão dessas linhas em branco: 1 linha tem algum conteúdo, 1 linha está toda em branco, 1 linha tem algum conteúdo, 1 linha está toda em branco
 
@@ -56,7 +55,7 @@ linhas_impares <- seq(1, nrow(dados), 2)
 
 View(linhas_pares)
 
-# separamos os dados e então usaremos o dataset df1 com as linhas pares (linhas onde tem dados válidos)
+# separamos os dados e então criaremos o dataset df1 com as linhas pares (linhas onde tem dados válidos)
 
 df1 <- dados[linhas_pares, ]
 View(df1)
@@ -129,15 +128,19 @@ grepl("^\\s*$", df1$Item02) # retorna TRUE quando tiver valores ausentes represe
 # Se não manteríamos transações com apenas 1 produto comprado, logo não conseguiríamos ver nenhum padrão.
 
 
-# Verificando número de itens distintos (retorna um número inteiro que indica a quantidade total de valores distintos encontrados em todo o dataframe df1.)
+# Verificando número de itens distintos (retorna um número inteiro que indica a quantidade total de valores distintos encontrados em todo o dataframe df1)
+# Ee você tem um vetor com os valores 1, 2, 2, 3, 4, a função n_distinct() irá retornar o valor 4, pois existem 4 valores distintos nesse vetor.
 
 n_distinct(df1)
 
 
 # Vamos trabalhar somente com os registros onde o item 2 não for nulo
+
+
 # criando um novo df a partir do df original "df1", removendo todas as linhas em que a coluna "Item02" contém valores ausentes representados por espaço em branco.
 
 df1_two <- df1[!grepl("^\\s*$", df1$Item02), ]
+df1_two <- subset(df1, !grepl("^\\s*$", Item02)) # 2ª forma
 
 
 # Verificando novamente número de itens distintos
@@ -170,7 +173,13 @@ n_distinct(df1_two)
 #   limitado de níveis, pois ocupa menos espaço em memória e permite que operações de comparação e ordenação sejam executadas mais
 #   rapidamente.
 
+
+# 1ª forma
+
 pacote <- df1_two
+str(pacote)
+
+# convertendo as primeiras 6 colunas para o tipo factor
 
 pacote$Item01 <- as.factor(pacote$Item01)
 pacote$Item02 <- as.factor(pacote$Item02)
@@ -179,13 +188,73 @@ pacote$Item04 <- as.factor(pacote$Item04)
 pacote$Item05 <- as.factor(pacote$Item05)
 pacote$Item06 <- as.factor(pacote$Item06)
 
-View(pacote)
-
-summary(pacote)
 str(pacote)
+summary(pacote)
+
+# filtrando / fazendo um split somente nas colunas que nos interessam (cria uma lista)
+# será necessário esta lista para a continuação do projeto
 
 pacote_split <- split(pacote[,1:6], f = pacote$Item02) # aqui teve que ser feita uma alteração no código. Foi usando o "f = pacote$Item02" para que o Length fique igual ao do professor
 
 View(pacote_split)
+
+
+
+# 2ª forma
+
+pacote_df <- df1_two
+str(pacote_df)
+
+# convertendo as primeiras 6 colunas para o tipo factor
+
+pacote_df <- pacote_df %>% mutate(across(Item01:Item06, factor))
+
+str(pacote_df)
+
+# filtrando / fazendo um split somente nas colunas que nos interessam (cria uma lista)
+# será necessário esta lista para a continuação do projeto
+
+pacote_lista <- pacote_df %>%
+                select(Item01:Item06) %>%
+                split(f = pacote$Item02)
+
+View(pacote_splitt)
+
+
+# selecionando as primeiras 6 colunas do tipo factor (criando um df com as 6 colunas do tipo fator)
+df_factor_cols <- pacote_df %>%
+                  select_if(is.factor) %>%
+                  select(1:6)
+
+
+
+# Até fizemos a escolha de trabalharmos somente com transações com no mínimo 2 produtos até 6 produtos
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
