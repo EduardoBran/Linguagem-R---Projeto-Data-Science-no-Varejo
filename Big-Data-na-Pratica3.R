@@ -143,6 +143,7 @@ df1_two <- df1[!grepl("^\\s*$", df1$Item02), ]
 df1_two <- subset(df1, !grepl("^\\s*$", Item02)) # 2ª forma
 
 
+
 # Verificando novamente número de itens distintos
 
 n_distinct(df1_two)
@@ -174,8 +175,6 @@ n_distinct(df1_two)
 #   rapidamente.
 
 
-# 1ª forma
-
 pacote <- df1_two
 str(pacote)
 
@@ -194,67 +193,17 @@ summary(pacote)
 # filtrando / fazendo um split somente nas colunas que nos interessam (cria uma lista)
 # será necessário esta lista para a continuação do projeto
 
-pacote_split <- split(pacote[,1:6], f = pacote$Item02) # aqui teve que ser feita uma alteração no código. Foi usando o "f = pacote$Item02" para que o Length fique igual ao do professor
-
-View(pacote_split)
-
-
-
-# 2ª forma
-
-pacote_df <- df1_two
-str(pacote_df)
-
-# convertendo as primeiras 6 colunas para o tipo factor
-
-pacote_df <- pacote_df %>% mutate(across(Item01:Item06, factor))
-
-str(pacote_df)
-
-# filtrando / fazendo um split somente nas colunas que nos interessam (cria uma lista)
-# será necessário esta lista para a continuação do projeto
-
-pacote_lista <- pacote_df %>%
-                select(Item01:Item06) %>%
-                split(f = pacote$Item02)
-
-View(pacote_splitt)
-
-
-# selecionando as primeiras 6 colunas do tipo factor (criando um df com as 6 colunas do tipo fator)
-df_factor_cols <- pacote_df %>%
-                  select_if(is.factor) %>%
-                  select(1:6)
+pacote_split <- split(pacote$Item01, 
+                      pacote$Item02,
+                      pacote$Item03, 
+                      pacote$Item04,
+                      pacote$Item05, 
+                      pacote$Item06,
+                      drop = FALSE)
 
 
 
-# Até fizemos a escolha de trabalharmos somente com transações com no mínimo 2 produtos até 6 produtos
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Até aqui fizemos a escolha de trabalharmos somente com transações com no mínimo 2 produtos até 6 produtos.
 
 
 
