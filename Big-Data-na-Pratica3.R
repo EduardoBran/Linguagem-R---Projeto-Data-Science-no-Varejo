@@ -206,4 +206,24 @@ pacote_split <- split(pacote$Item01,
 # Até aqui fizemos a escolha de trabalharmos somente com transações com no mínimo 2 produtos até 6 produtos.
 
 
+# Após a organização dos dados, podemos então extrair as regras de associação.
+
+
+# Extraindo as regras de associação
+
+# Para isso vamos usar o algoritimo/função apriori() que está no pacote 'arules'.
+# Está função espera receber os dados no formato / na classe do tipo transações (na classe transactions)
+
+# Forçando um objeto a pertencer a outra classe através da função as()
+
+transacoes <- as(pacote_split, "transactions")
+
+# Inspecionando as regras através da função inspect() (aqui ainda está no formato geral pois ainda não definimos as regras)
+
+inspect(head(transacoes, 5))
+
+
+
+
+
 
