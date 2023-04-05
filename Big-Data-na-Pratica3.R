@@ -425,5 +425,22 @@ inspect(head(sort(regras_produto3_alt_clean, by = 'confidence', decreasing = TRU
 
 
 
+# Salvando o conjunto de regras dos 3 produtos como dataframe e entao salva em disco
 
+df_produtos1 <- as(regras_produto1_alt_clean, "data.frame")
+View(df_produtos1)
+
+write_xlsx(df_produtos1, "df_produto1.xlsx")
+
+
+df_produtos2 <- as(regras_produto2_alt_clean, "data.frame")
+View(df_produtos2)
+
+write_xlsx(df_produtos2, "df_produto1.xlsx")
+
+
+df_produtos3 <- as(regras_produto3_alt_clean, "data.frame")
+View(df_produtos3)
+
+write_xlsx(df_produtos3, "df_produto1.xlsx")
 
