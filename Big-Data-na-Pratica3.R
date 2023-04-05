@@ -191,7 +191,7 @@ str(pacote)
 summary(pacote)
 
 # filtrando / fazendo um split somente nas colunas que nos interessam (cria uma lista)
-# será necessário esta lista para criar o objeto de transações mais ainda.
+# será necessário esta lista para criar o objeto de transações mais adiante
 
 pacote_split <- split(pacote$Item01, 
                       pacote$Item02,
@@ -238,8 +238,8 @@ inspect(head(transacoes, 5))
 # No código abaixo, são definidos dois parâmetros em 'parameter':
 #  - conf: define o valor mínimo de confiança das regras encontradas. Nesse caso, é definido como 0.5, ou seja, serão consideradas 
 #    apenas regras com pelo menos 50% de confiança.
-#  - minlen: define o tamanho mínimo das regras encontradas. Nesse caso, é definido como 3, ou seja, serão consideradas apenas regras
-#    com pelo menos 3 itens.
+#  - minlen: define o tamanho mínimo das regras encontradas. Nesse caso, é definido como 3, ou seja, serão consideradas apenas
+#    regras com pelo menos 3 itens.
 # Além disso, é utilizado o argumento appearance para:
 #  - argumento default é definido como "lhs", indicando que os itens do lado esquerdo da regras serão variáveis.
 #  - definir que o produto "Dust-Off Compressed Gas 2 pack" será o item do lado direito das regras encontradas.
@@ -253,8 +253,10 @@ regras_produto1 <- apriori(transacoes,
 # Inspecionando o resultado do produto 1 acima (o código abaixo exibe as cinco regras com o maior valor de confidence, que indicam as associações mais fortes entre os produtos na base de transações, considerando a condição da compra do produto "Dust-Off Compressed Gas 2 pack".)
 
 # lhs significa antecedente e rhs significa consequente, a compra dos dois produtos de lhs levou a compra do produto de rhs
+# Quanto maior o suporte de um itemset ou regra, mais frequente é a sua ocorrência no conjunto de dados.
 # Uma confiança de 1.0 indica que os itens do antecedente sempre aparecem juntos com o item do consequente. Uma confiança menor 
 # que 1.0 indica que os itens do antecedente nem sempre aparecem juntos com o item do consequente, mas ocorre com uma certa frequência.
+# Quanto maior a coverage de um itemset ou regra, mais transações contêm pelo menos um dos seus itens.
 
 inspect(head(sort(regras_produto1, by = 'confidence'), 5))
 inspect(head(sort(regras_produto1, by = 'confidence', decreasing = FALSE), 5))
@@ -283,6 +285,123 @@ regras_produto3 <- apriori(transacoes,
 
 inspect(head(sort(regras_produto3, by = 'confidence'), 5))
 inspect(head(sort(regras_produto3, by = 'confidence', decreasing = FALSE), 5))
+
+
+
+# Um dos desafios de se trabalhar com Market Basket Analysis é que podemos ter como resultado muitas e muitas regras.
+# Podemos ter centenas ou milhares de regras dependendo do conjunto de dados.
+# Será que todas as regras são importantes ? Será que podes filtrar as regras e trazer somente as que são relevantes ?
+
+
+# Vamos verificar novamente as regras do produto "Dust-Off Compressed Gas 2 pack" alterando uma das métricas
+
+# # No código abaixo, foi definidos mais dois parâmetros em 'parameter':
+#  - conf: define o valor mínimo de confiança das regras encontradas. Nesse caso, é definido como 0.5, ou seja, serão consideradas 
+#    apenas regras com pelo menos 50% de confiança.
+#  - minlen: define o tamanho mínimo das regras encontradas. Nesse caso, é definido como 3, ou seja, serão consideradas apenas
+#    regras com pelo menos 3 itens.
+#  - supp = 0.2: define o suporte mínimo que uma regra deve ter para ser considerada relevante.
+#  - target = "rules": especifica que o objetivo é gerar regras de associação.
+
+regras_produto1_alt <- apriori(transacoes,
+                               parameter = list(conf = 0.5, minlen = 3, supp = 0.2, target = "rules"),
+                               appearance = list(default = "lhs", rhs = "Dust-Off Compressed Gas 2 pack"))
+
+# Inpencionando
+
+inspect(head(sort(regras_produto1_alt, by = 'confidence'), 5))
+inspect(head(sort(regras_produto1_alt, by = 'confidence', decreasing = FALSE), 5))
+
+# Filtrando as regras redundantes (remover toda regra que for redundante)
+
+regras_produto1_alt_clean <- regras_produto1_alt[!is.redundant(regras_produto1_alt)]
+
+# Inpencionando
+
+inspect(head(sort(regras_produto1_alt, by = 'confidence'), 5))
+inspect(head(sort(regras_produto1_alt, by = 'confidence', decreasing = FALSE), 5))
+
+# Sumário
+
+summary(regras_produto1_alt_clean)
+
+
+# Plotando (exibe todas as ligações das regras do produto "Dust-Off Compressed Gas 2 pack")
+
+# Gerando um gráfico de regras de associação, usando a função plot do pacote arulesViz do R. A função é usada para visualizar as regras
+# de associação obtidas anteriormente através da análise de mercado.
+# Os parâmetros utilizados são:
+#  - regras_produto1_alt_clean: o objeto que contém as regras de associação a serem plotadas.
+#  - measure = "support": define que o suporte será utilizado como medida de destaque no gráfico.
+#  - shading = "confidence": define que a cor das bordas será baseada na medida de confiança.
+#  - method = "graph": define que a visualização será por meio de um grafo, no qual os itens são representados como nós e as regras de
+#    associação como arestas.
+#  - engine = "html": define que a saída do gráfico será um arquivo html.
+# O resultado será um gráfico interativo que permitirá explorar as regras de associação geradas com base nas medidas de suporte e confiança.
+
+plot(regras_produto1_alt_clean, measure = "support", shading = "confidence",
+     method = "graph", engine = "html")
+
+
+
+# Verificando novamente as regras do produto "HP 61 ink" alterando uma das métricas
+
+regras_produto2_alt <- apriori(transacoes,
+                               parameter = list(conf = 0.5, minlen = 3, supp = 0.2, target = "rules"),
+                               appearance = list(default = "lhs", rhs = "HP 61 ink"))
+
+# Inpencionando
+
+inspect(head(sort(regras_produto2_alt, by = 'confidence'), 5))
+inspect(head(sort(regras_produto2_alt, by = 'confidence', decreasing = FALSE), 5))
+
+# Filtrando as regras redundantes (remover toda regra que for redundante)
+
+regras_produto2_alt_clean <- regras_produto2_alt[!is.redundant(regras_produto2_alt)]
+
+# Inpencionando
+
+inspect(head(sort(regras_produto2_alt, by = 'confidence'), 5))
+inspect(head(sort(regras_produto2_alt, by = 'confidence', decreasing = FALSE), 5))
+
+# Plotando (exibe todas as ligações das regras do produto "HP 61 ink")
+
+plot(regras_produto2_alt_clean, measure = "support", shading = "confidence",
+     method = "graph", engine = "html")
+
+
+
+# Verificando novamente as regras do produto "VIVO Dual LCD Monitor Desk mount" alterando uma das métricas
+
+regras_produto3_alt <- apriori(transacoes,
+                               parameter = list(conf = 0.5, minlen = 3, supp = 0.2, target = "rules"),
+                               appearance = list(default = "lhs", rhs = "VIVO Dual LCD Monitor Desk mount"))
+
+# Inpencionando
+
+inspect(head(sort(regras_produto3_alt, by = 'confidence'), 5))
+inspect(head(sort(regras_produto3_alt, by = 'confidence', decreasing = FALSE), 5))
+
+# Filtrando as regras redundantes (remover toda regra que for redundante)
+
+regras_produto3_alt_clean <- regras_produto3_alt[!is.redundant(regras_produto3_alt)]
+
+# Inpencionando
+
+inspect(head(sort(regras_produto3_alt, by = 'confidence'), 5))
+inspect(head(sort(regras_produto3_alt, by = 'confidence', decreasing = FALSE), 5))
+
+# Plotando (exibe todas as ligações das regras do produto "HP 61 ink")
+
+plot(regras_produto3_alt_clean, measure = "support", shading = "confidence",
+     method = "graph", engine = "html")
+
+
+
+
+
+
+
 
 
 
