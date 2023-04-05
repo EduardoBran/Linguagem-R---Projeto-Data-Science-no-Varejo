@@ -400,9 +400,28 @@ plot(regras_produto3_alt_clean, measure = "support", shading = "confidence",
 
 
 
+# Salvando o resultado e entregando ao cliente final / tomador de decisão
 
 
+# Visualizando as 3 top regras
 
+# O valor de support de 29,91% significa que "Screen Mom Screen Cleaner kit" e "VIVO Dual LCD Monitor Desk mount" 
+# aparecem juntos em 29,91% de todas as transações.
+
+# O valor de confidence é 100%, o que significa que sempre que "Screen Mom Screen Cleaner kit" e
+# "VIVO Dual LCD Monitor Desk mount" aparecerem juntos, o produto "Dust-Off Compressed Gas 2 pack" será comprado.
+
+# O valor de coverage significa a proporção de transações que contêm pelo menos um dos itens da regra, ou seja, nesse caso,
+# em 29,91% das transações há pelo menos um dos produtos "Screen Mom Screen Cleaner kit" ou
+# "VIVO Dual LCD Monitor Desk mount" e em 100% dessas transações em que esses produtos aparecem, o produto
+# "Dust-Off Compressed Gas 2 pack" também aparece.
+
+
+inspect(head(sort(regras_produto1_alt_clean, by = 'support', decreasing = TRUE), 1))
+
+
+inspect(head(sort(regras_produto2_alt_clean, by = 'confidence', decreasing = TRUE), 1))
+inspect(head(sort(regras_produto3_alt_clean, by = 'confidence', decreasing = TRUE), 1))
 
 
 
