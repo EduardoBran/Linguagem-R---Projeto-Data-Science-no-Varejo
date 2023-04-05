@@ -191,7 +191,7 @@ str(pacote)
 summary(pacote)
 
 # filtrando / fazendo um split somente nas colunas que nos interessam (cria uma lista)
-# será necessário esta lista para a continuação do projeto
+# será necessário esta lista para criar o objeto de transações mais ainda.
 
 pacote_split <- split(pacote$Item01, 
                       pacote$Item02,
@@ -214,13 +214,75 @@ pacote_split <- split(pacote$Item01,
 # Para isso vamos usar o algoritimo/função apriori() que está no pacote 'arules'.
 # Está função espera receber os dados no formato / na classe do tipo transações (na classe transactions)
 
+
 # Forçando um objeto a pertencer a outra classe através da função as()
 
 transacoes <- as(pacote_split, "transactions")
 
+
 # Inspecionando as regras através da função inspect() (aqui ainda está no formato geral pois ainda não definimos as regras)
 
 inspect(head(transacoes, 5))
+
+
+# Agora que o objeto "transações" foi criado, é possível utilizar algoritmos de mineração de regras para extrair regras que
+# expressem associações frequentes entre os itens presentes nas transações. Vamos utilizar o algoritmo apriori()
+
+
+
+# Vamos definir as regras de modo mais refinado, com base em métricas através da funcao apriori()
+# Será necessário a escolha de um dos produtos para ser usado como ponto de partida ("Dust-Off Compressed Gas 2 pack")
+
+
+# Através da função apriori da biblioteca arules, podemos encontrar regras de associação entre os produtos da transação 'transacoes'.
+# No código abaixo, são definidos dois parâmetros em 'parameter':
+#  - conf: define o valor mínimo de confiança das regras encontradas. Nesse caso, é definido como 0.5, ou seja, serão consideradas 
+#    apenas regras com pelo menos 50% de confiança.
+#  - minlen: define o tamanho mínimo das regras encontradas. Nesse caso, é definido como 3, ou seja, serão consideradas apenas regras
+#    com pelo menos 3 itens.
+# Além disso, é utilizado o argumento appearance para:
+#  - argumento default é definido como "lhs", indicando que os itens do lado esquerdo da regras serão variáveis.
+#  - definir que o produto "Dust-Off Compressed Gas 2 pack" será o item do lado direito das regras encontradas.
+?apriori
+
+regras_produto1 <- apriori(transacoes,
+                           parameter = list(conf = 0.5, minlen = 3),
+                           appearance = list(default = "lhs", rhs = "Dust-Off Compressed Gas 2 pack"))
+
+
+# Inspecionando o resultado do produto 1 acima (o código abaixo exibe as cinco regras com o maior valor de confidence, que indicam as associações mais fortes entre os produtos na base de transações, considerando a condição da compra do produto "Dust-Off Compressed Gas 2 pack".)
+
+# lhs significa antecedente e rhs significa consequente, a compra dos dois produtos de lhs levou a compra do produto de rhs
+# Uma confiança de 1.0 indica que os itens do antecedente sempre aparecem juntos com o item do consequente. Uma confiança menor 
+# que 1.0 indica que os itens do antecedente nem sempre aparecem juntos com o item do consequente, mas ocorre com uma certa frequência.
+
+inspect(head(sort(regras_produto1, by = 'confidence'), 5))
+inspect(head(sort(regras_produto1, by = 'confidence', decreasing = FALSE), 5))
+inspect(head(sort(regras_produto1, by = 'count'), 5))
+inspect(head(sort(regras_produto1, by = 'confidence', decreasing = FALSE), 5))
+
+
+
+# Vamos verificar as regras do produto "HP 61 ink"
+
+regras_produto2 <- apriori(transacoes,
+                           parameter = list(conf = 0.5, minlen = 3),
+                           appearance = list(default = 'lhs', rhs = 'HP 61 ink'))
+
+
+inspect(head(sort(regras_produto2, by = 'confidence'), 5))
+inspect(head(sort(regras_produto2, by = 'confidence', decreasing = FALSE), 5))
+
+
+# Vamos verificar as regras do produto "VIVO Dual LCD Monitor Desk mount"
+
+regras_produto3 <- apriori(transacoes,
+                           parameter = list(conf = 0.5, minlen = 3),
+                           appearance = list(default = 'lhs', rhs = 'VIVO Dual LCD Monitor Desk mount'))
+
+
+inspect(head(sort(regras_produto3, by = 'confidence'), 5))
+inspect(head(sort(regras_produto3, by = 'confidence', decreasing = FALSE), 5))
 
 
 
