@@ -142,7 +142,7 @@ n_distinct(df1)
 df1_two <- df1[!grepl("^\\s*$", df1$Item02), ]
 df1_two <- subset(df1, !grepl("^\\s*$", Item02)) # 2ª forma
 
-
+View(df1_two)
 
 # Verificando novamente número de itens distintos
 
@@ -411,11 +411,18 @@ plot(regras_produto3_alt_clean, measure = "support", shading = "confidence",
 # O valor de confidence é 100%, o que significa que sempre que "Screen Mom Screen Cleaner kit" e
 # "VIVO Dual LCD Monitor Desk mount" aparecerem juntos, o produto "Dust-Off Compressed Gas 2 pack" será comprado.
 
-# O valor de coverage significa a proporção de transações que contêm pelo menos um dos itens da regra, ou seja, nesse caso,
-# em 29,91% das transações há pelo menos um dos produtos "Screen Mom Screen Cleaner kit" ou
+# O valor de coverage significa a proporção de transações que contêm pelo menos um dos itens da regra, ou seja, 
+# nesse caso, em 29,91% das transações há pelo menos um dos produtos "Screen Mom Screen Cleaner kit" ou
 # "VIVO Dual LCD Monitor Desk mount" e em 100% dessas transações em que esses produtos aparecem, o produto
 # "Dust-Off Compressed Gas 2 pack" também aparece.
 
+# O 'lift' é uma medida que indica a força da associação entre os produtos. O valor de 1.746269 na regra 1 indica
+# que a compra do "Dust-Off Compressed Gas 2 pack" é 1,746269 vezes mais provável quando os produtos
+# "Screen Mom Screen Cleaner kit" e "VIVO Dual LCD Monitor Desk mount" também são comprados, em comparação com a
+# compra do "Dust-Off Compressed Gas 2 pack" sem a compra desses dois produtos. Quanto maior o valor do lift, mais
+# forte é a associação entre os produtos. Um valor de lift acima de 1 indica que a compra dos produtos é mais
+# provável juntos do que aleatoriamente, enquanto um valor de lift abaixo de 1 indica que os produtos são menos
+# propensos a serem comprados juntos do que aleatoriamente.
 
 inspect(head(sort(regras_produto1_alt_clean, by = 'support', decreasing = TRUE), 1))
 
@@ -436,11 +443,11 @@ write_xlsx(df_produtos1, "df_produto1.xlsx")
 df_produtos2 <- as(regras_produto2_alt_clean, "data.frame")
 View(df_produtos2)
 
-write_xlsx(df_produtos2, "df_produto1.xlsx")
+write_xlsx(df_produtos2, "df_produto2.xlsx")
 
 
 df_produtos3 <- as(regras_produto3_alt_clean, "data.frame")
 View(df_produtos3)
 
-write_xlsx(df_produtos3, "df_produto1.xlsx")
+write_xlsx(df_produtos3, "df_produto3.xlsx")
 
