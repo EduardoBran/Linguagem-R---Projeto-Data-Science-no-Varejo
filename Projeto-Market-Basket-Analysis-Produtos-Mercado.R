@@ -95,8 +95,39 @@ write_csv(dados_final, 'dados_compras_supermercado.csv')
 
 
 
-# Explorando o dataset
+# Carregando e explorando o dataset
 
-dados <- read.csv("dados_compras_supermercado.csv")
+dados <- read.csv("dados_compras_supermercado.csv", fileEncoding = "UTF-8")
+
+
+dim(dados)   # 93 Linhas 9 Colunas
+str(dados)   
+
+
+# Nossa verificação é baseada na regra de negócio para aplicação do Masket Basket Analysis
+
+
+# Verificando se possui linhas vazias de forma geral
+any(apply(dados, 1, function(x) all(is.na(x) | x == "")))
+
+# Verifica se cada linha tem todos os valores ausentes (NA) ou vazios ("")
+todas_na <- apply(dados, 1, function(x) all(is.na(x) | x == ""))
+todas_na
+
+# Exibe as linhas que possuem todos os valores ausentes
+dados[todas_na, ]
+
+# Exclui todas as linhas com valores ausentes (NA) e vazios ("")
+dados_final <- dados[-which(todas_na), ]
+
+
+dim(dados_final) # 90 Linhas 9 Colunas
+
+
+# Verifica se alguma coluna possui somente valores NA
+col_com_todos_na <- colnames(dados_final)[which(colSums(is.na(dados_final)) == nrow(dados_final))]
+col_com_todos_na
+
+
 
 
