@@ -60,15 +60,15 @@ dados3 <- data.frame(Item01 = c('macarrão', 'macarrão', 'macarrão', 'macarrã
 )
 
 
-dados4 <- data.frame(Item01 = c('pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza'),
-                     Item02 = c('ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'alho', 'alho', ''),
-                     Item03 = c('queijo', 'alho', 'queijo', 'alho', 'quejo', 'alho', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', ''),
-                     Item04 = c('refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'palito', 'palito', 'palito', 'palito', 'palito', 'guardanapo', 'guardanapo', '', ''),
-                     Item05 = c('guardanapo', 'guardanapo', 'palito', 'guardanapo', 'palito', 'guardanapo', 'palito', 'guardanapo', 'guardanapo', 'salame', 'milho', 'salame', 'milho', 'salame', 'milho', '', '', '', '', ''),
-                     Item06 = c('calabresa', 'calabresa', 'calabresa', 'cerveja', 'calabresa', 'cerveja', 'calabresa', 'cerveja', 'calabresa', 'cerveja', 'calabresa', 'cerveja', 'cebola', 'cebola', 'cebola', 'cebola', 'cebola', 'cebola', '', ''),
-                     Item07 = c('salame', 'salame', 'salame', 'milho', 'salame', 'milho', 'salame', 'milho', 'salame', 'milho', '', '', '', '', '', '', '', '', '', ''),
-                     Item08 = c('cebola', 'cebola', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
-                     Item09 = c('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')
+dados4 <- data.frame(Item01 = c('pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza', 'pizza'),
+                     Item02 = c('ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'ketchup', 'alho', 'alho', '', 'alho', 'alho', 'alho', 'alho', 'ketchup', 'alho', 'ketchup', 'alho', 'alho'),
+                     Item03 = c('queijo', 'alho', 'queijo', 'alho', 'quejo', 'alho', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', 'mostarda', '', '', '', '', 'ketchup', 'alho', 'ketchup', 'alho', '', ''),
+                     Item04 = c('refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'refrigerante', 'palito', 'palito', 'palito', 'palito', 'palito', 'guardanapo', 'guardanapo', '', '', '', '', '', '', '', '', '', '', ''),
+                     Item05 = c('guardanapo', 'guardanapo', 'palito', 'guardanapo', 'palito', 'guardanapo', 'palito', 'guardanapo', 'guardanapo', 'salame', 'milho', 'salame', 'milho', 'salame', 'milho', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
+                     Item06 = c('calabresa', 'calabresa', 'calabresa', 'cerveja', 'calabresa', 'cerveja', 'calabresa', 'cerveja', 'calabresa', 'cerveja', 'calabresa', 'cerveja', 'cebola', 'cebola', 'cebola', 'cebola', 'cebola', 'cebola', '', '', '', '', '', '', '', '', '', '', ''),
+                     Item07 = c('salame', 'salame', 'salame', 'milho', 'salame', 'milho', 'salame', 'milho', 'salame', 'milho', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
+                     Item08 = c('cebola', 'cebola', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''),
+                     Item09 = c('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '')
 )
 
 
@@ -95,6 +95,7 @@ write_csv(dados_final, 'dados_compras_supermercado.csv')
 
 
 
+
 # Carregando e explorando o dataset
 
 dados <- read.csv("dados_compras_supermercado.csv", fileEncoding = "UTF-8")
@@ -110,7 +111,7 @@ str(dados)
 # Verificando se possui linhas vazias de forma geral
 any(apply(dados, 1, function(x) all(is.na(x) | x == "")))
 
-# Verifica se cada linha tem todos os valores ausentes (NA) ou vazios ("")
+# Verifica se cada linha possui somentes valores ausentes (NA) ou vazios ("")
 todas_na <- apply(dados, 1, function(x) all(is.na(x) | x == ""))
 todas_na
 
@@ -124,9 +125,90 @@ dados_final <- dados[-which(todas_na), ]
 dim(dados_final) # 90 Linhas 9 Colunas
 
 
-# Verifica se alguma coluna possui somente valores NA
+# Verifica se alguma coluna possui somente valores NA exibe o nome dessa coluna
 col_com_todos_na <- colnames(dados_final)[which(colSums(is.na(dados_final)) == nrow(dados_final))]
 col_com_todos_na
+
+# Exclui a coluna Item09
+dados_final <- dados_final[, -which(colnames(dados_final) == "Item09")]
+
+
+
+# Verifica se tem valores NA (valores ausentes) especificamente para a primeira coluna 'Item01'
+
+# 1ª forma
+sum(is.na(dados_final$Item01))                            # retorna a quantidade de valores iguais a NA na coluna Item01 
+
+# 2º forma
+any(is.na(dados_final$Item01) | dados_final$Item01 == "") # retorna um valor lógico (aqui retorna FALSE) indicando se há pelo menos um valor NA ou em branco (com caracter espaço)
+
+
+# Verifica se tem valores NA (valores ausentes) especificamente para a segunda coluna 'Item02'
+
+# 1ª forma
+sum(is.na(dados_final$Item02))                            # retorna a quantidade de valores iguais a NA na coluna Item02 (ainda vai retornar 0 pois não está verificando o "") 
+
+# 2º forma
+any(is.na(dados_final$Item02) | dados_final$Item02 == "") # retorna um valor lógico (aqui retorna TRUE) indicando se há pelo menos um valor NA ou em branco (com caracter espaço)
+
+
+# Verificando se termos valores ausentes representados por espaço em branco
+which(nchar(trimws(dados_final$Item01))==0)  # coluna Item01 (retorna 0) 
+which(nchar(trimws(dados_final$Item02))==0)  # coluna Item02 (retorna a posição dos elementos do vetor onde o número de caracteres é igual a zero, a linha 10 do data frame "df1" contém uma string vazia na coluna "Item02", e é por isso que essa linha é retornada pelo código mencionado.)
+
+# Verificando se termos valores ausentes representados por espaço em branco (usando expressão regular)
+grepl("^\\s*$", dados_final$Item01) # retorna tudo FALSE
+grepl("^\\s*$", dados_final$Item02) # retorna TRUE quando tiver valores ausentes representados por espaço em branco
+
+
+# Vamos trabalhar somente com os registros onde o item 2 não for nulo
+
+
+# Removendo todas as linhas em que a coluna "Item02" contém valores ausentes representados por espaço em branco.
+dados <- dados_final[!grepl("^\\s*$", dados_final$Item02), ]
+
+
+
+# Até aqui mantivemos no nosso dataframe 'dados' transações somente onde houveram a compra de pelo menos 2 produtos
+
+
+# Iremos trabalhar com apenas 6 colunas
+
+
+# Preparando o pacote convertendo as 6 variáveis (colunas) para o tipo fator (necessário para a análise MBA)
+
+pacote <- dados
+str(pacote)
+
+View(pacote)
+
+pacote$Item01 <- as.factor(pacote$Item01)
+pacote$Item02 <- as.factor(pacote$Item02)
+pacote$Item03 <- as.factor(pacote$Item03)
+pacote$Item04 <- as.factor(pacote$Item04)
+pacote$Item05 <- as.factor(pacote$Item05)
+pacote$Item06 <- as.factor(pacote$Item06)
+
+str(pacote)
+
+# filtrando / fazendo um split somente nas colunas que nos interessam (cria uma lista)
+# será necessário esta lista para criar o objeto de transações mais adiante (não funciona se toda uma coluna tiver somente valores NA)
+
+pacote_split <- split(pacote$Item01, 
+                      pacote$Item02,
+                      pacote$Item03, 
+                      pacote$Item04,
+                      pacote$Item05, 
+                      pacote$Item06,
+                      drop = FALSE)
+
+pacote_split
+
+
+
+
+
+
 
 
 
