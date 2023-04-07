@@ -206,6 +206,38 @@ pacote_split
 
 
 
+# Até aqui fizemos a escolha de trabalharmos somente com transações com no mínimo 2 produtos até 6 produtos.
+
+
+# Extraindo as regras de associação
+
+# Para isso vamos usar o algoritimo/função apriori() que está no pacote 'arules'.
+# Está função espera receber os dados no formato / na classe do tipo transações (na classe transactions)
+
+
+# Forçando um objeto a pertencer a outra classe através da função as()
+
+transacoes <- as(pacote_split, "transactions")
+
+# Inspecionando as regras através da função inspect() (aqui ainda está no formato geral pois ainda não definimos as regras)
+
+inspect(head(transacoes, 5))
+
+
+# Vamos definir as regras de modo mais refinado, com base em métricas através da funcao apriori()
+# Será necessário a escolha de um dos produtos para ser usado como ponto de partida ("café")
+
+regras_produto_limao <- apriori(transacoes,
+                                parameter = list(conf = 0.5, minlen = 2, supp = 0.01),
+                                appearance = list(default = 'lhs', rhs = 'limao'))
+
+inspect(head(sort(regras_produto_limao, by = 'confidence'), 5))
+
+
+
+
+
+
 
 
 
